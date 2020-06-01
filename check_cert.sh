@@ -36,6 +36,7 @@ usage() {
   echo "Usage: check_cert.sh -H host [OPTIONS]"
   echo
   echo "Options:"
+  echo "   -H,--host                  host"
   echo "   -c,--critical days         minimum number of days a certificate has to be valid"
   echo "                              to issue a critical status"
   echo "   -h,--help                  this help message"
@@ -46,7 +47,6 @@ usage() {
 
 # Command line options
 while true; do
-
   case "$1" in
     -H|--host)
       if [ $# -gt 1 ]; then
@@ -71,16 +71,23 @@ while true; do
       fi
       ;;
     -V|--version)
+      shift
       echo "Version ${VERSION}"
       exit 3
       ;;   
    -h|--help)
+      shift
       usage
       exit 0
       ;;    
     *)
-      echo "Invalid option $1"
-      exit 3
+      if [ ! -z "$1" ]; then
+        echo "Invalid option $1"
+        usage
+        exit 3
+      fi
+      shift
+      break
       ;;
   esac
 
